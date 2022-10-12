@@ -1,12 +1,11 @@
 %% This is a function for creating lung FE meshes from segmentation data.
-% Created on 6/21/2021 by Hannah Borges
-% Updated on 9/28/2022 by Ryan Langstraat and Adam Galloy
-% Inputs: voxel_size, image, output_name
-% voxel_size is the dimensions of the image voxels in the file 
-% image is a binary mask
-% output_name is the desired output name for the file generated 
-% lobeFlag is a variable that indicates whether the surface should be
-% filled or not. Use 1 for filling and 0 for not filling.
+% Created on 06/21/2021 by Hannah Borges
+% Updated on 10/12/2022 by Ryan Langstraat and Adam Galloy
+% Inputs: voxel_size, image, options
+%   voxel_size = dimensions of the image voxels in the file 
+%       image is a binary mask
+%   output_name = desired output name for the file generated 
+%   options = a structure containing additional options
 
 function [NodeArray, ElementArray] = MeshMaskRegion(voxel_size, image, options)
 %% Parse options structure
@@ -27,7 +26,6 @@ if isfield(options,'plots')
                  "SmoothedSurface", "FilledMesh"];
     else
         plots = options.plots;
-        disp(plots)
     end
 else
     plots = "none";
