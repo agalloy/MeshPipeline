@@ -31,9 +31,9 @@ else
     plots = "none";
 end
 if isfield(options,'anisotropy')
-    optionStruct.anisotropy = options.anisotropy;
+    anisotropy = options.anisotropy;
 else
-    optionStruct.anisotropy = 0;
+    anisotropy = 0;
 end
 %% Step 1: Getting the levelsets from the segmentation
 
@@ -82,23 +82,14 @@ end
 % Calculating number of nodes required for given point spacing
 pointSpacing = 6; % Desired point spacing 
 
-A = patch_area(ElementArray, NodeArray); % Areas of current faces
+A = patchArea(ElementArray, NodeArray); % Areas of current faces
 totalArea = sum( A ); % Total area
 l = sqrt(totalArea); % Width or length of square with same size
 numPoints = round((l./pointSpacing).^2); % Point spacing for mesh in virtual square
 
-% Remesh options (geodesic resampling - outdated)
-% indStart = 1; % Index of start point 
-% optionStruct.toleranceLevel = 0; % Tolerance for convergence 
-% optionStruct.waitBarOn = 1; % Turn on/off waitbar
-% [ElementArray, NodeArray, ~, ~, ~] = remeshTriSurfDistMap(ElementArray, NodeArray, numPoints, indStart, optionStruct);
-% 
-% % Remove three connected faces
-% [ElementArray,NodeArray,~]=triSurfRemoveThreeConnect(ElementArray,NodeArray); 
-
-% Remesh options (Geogram)
+% Remesh options
 optionStruct.nb_pts = numPoints;
-%optionStruct.anisotropy = 5;
+optionStruct.anisotropy = anisotropy;
 [ElementArray, NodeArray] = ggremesh(ElementArray, NodeArray, optionStruct);
 
 % Check for holes in mesh using Euler Characteristic
@@ -114,12 +105,12 @@ V = vertexAttachments(TR);
 numAdj = cellfun(@numel, V);
 
 [count,~] = hist(numAdj,1:10);
-disp('Histogram of Remeshed Surface:')
+disp('Histogram of number of faces neighboring each node:')
 disp(100*count / sum(count))
 
 % Calculate the max angles
 maxTheta = maxTriSurfAngle(NodeArray, ElementArray);
-disp('Mean Dihedral Angle: Remeshed Surface')
+disp('Mean Max Dihedral Angle: Remeshed Surface')
 disp(mean(maxTheta))
 
 % View remeshed surface 
@@ -151,11 +142,6 @@ cParSmooth.n = 50; % Number of iterations
 TR = triangulation(ElementArray, NodeArray);
 V = vertexAttachments(TR);
 numAdj = cellfun(@numel, V);
-
-[count,~] = hist(numAdj,1:10);
-disp('Histogram of Smoothed Surface')
-disp(100*count / sum(count))
-
 
 % Calculate the max angles
 maxTheta = maxTriSurfAngle(NodeArray, ElementArray);

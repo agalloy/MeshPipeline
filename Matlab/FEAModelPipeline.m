@@ -4,6 +4,7 @@
 % To Do:
 %   - Retrieve mesh metrics from MeshPipeline to analyze all models together
 %   - Make the user parameters for generating multiple models simpler
+%   - Get the mesh output to work properly
 
 %% Initialize MATLAB
 clear
@@ -11,15 +12,15 @@ clc
 
 %% User parameters (Basic)
 % Segmentation mask directory and pattern
-mask_dir = 'C:\Users\admth\Documents\AdamGalloy\Research\BioMOST\Lung Project\MeshPipeline\Segmentations';
+mask_dir = '..\Segmentations';
 mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_testfill.nii';
 
 % Output febio mesh model directory and pattern
-feb_dir = 'C:\Users\admth\Documents\AdamGalloy\Research\BioMOST\Lung Project\MeshPipeline\FEBio';
+feb_dir = '..\FEBio';
 feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 
 % Displacement field directory
-disp_dir = 'C:\Users\admth\Documents\AdamGalloy\Research\BioMOST\Lung Project\MeshPipeline\DispFields';
+disp_dir = '..\DispFields';
 
 % List of subjects to process (as string array)
 subjects = "H5972";
