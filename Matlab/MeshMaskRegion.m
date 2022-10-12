@@ -4,10 +4,10 @@
 % Inputs: voxel_size, image, options
 %   voxel_size = dimensions of the image voxels in the file 
 %       image is a binary mask
-%   output_name = desired output name for the file generated 
+%   mask = binary image of the region to be meshed (1) and background (0)
 %   options = a structure containing additional options
 
-function [NodeArray, ElementArray] = MeshMaskRegion(voxel_size, image, options)
+function [NodeArray, ElementArray] = MeshMaskRegion(voxel_size, mask, options)
 %% Parse options structure
 if isfield(options,'tetFill')
     tetFill = options.tetFill;
@@ -31,14 +31,14 @@ else
     plots = "none";
 end
 if isfield(options,'anisotropy')
-    optionStruct.anisotropy = options.anisotropy;
+    anisotropy = options.anisotropy;
 else
-    optionStruct.anisotropy = 0;
+    anisotropy = 0;
 end
 %% Step 1: Getting the levelsets from the segmentation
 
 % Convert segmentation into levelsets
-levelset = logic2levelset(image,voxel_size);
+levelset = logic2levelset(mask,voxel_size);
 
 % View zero points of levelset
 if ismember("LevelSet", plots)
@@ -74,7 +74,6 @@ if ismember("InitialSurface",plots)
     camlight headlight;
     drawnow; 
     daspect([1,1,1]);
-    set(gca, 'Zdir', 'reverse')
     hold off
 end
  
@@ -82,23 +81,14 @@ end
 % Calculating number of nodes required for given point spacing
 pointSpacing = 6; % Desired point spacing 
 
-A = patch_area(ElementArray, NodeArray); % Areas of current faces
+A = patchArea(ElementArray, NodeArray); % Areas of current faces
 totalArea = sum( A ); % Total area
 l = sqrt(totalArea); % Width or length of square with same size
 numPoints = round((l./pointSpacing).^2); % Point spacing for mesh in virtual square
 
-% Remesh options (geodesic resampling - outdated)
-% indStart = 1; % Index of start point 
-% optionStruct.toleranceLevel = 0; % Tolerance for convergence 
-% optionStruct.waitBarOn = 1; % Turn on/off waitbar
-% [ElementArray, NodeArray, ~, ~, ~] = remeshTriSurfDistMap(ElementArray, NodeArray, numPoints, indStart, optionStruct);
-% 
-% % Remove three connected faces
-% [ElementArray,NodeArray,~]=triSurfRemoveThreeConnect(ElementArray,NodeArray); 
-
-% Remesh options (Geogram)
+% Remesh options
 optionStruct.nb_pts = numPoints;
-%optionStruct.anisotropy = 5;
+optionStruct.anisotropy = anisotropy;
 [ElementArray, NodeArray] = ggremesh(ElementArray, NodeArray, optionStruct);
 
 % Check for holes in mesh using Euler Characteristic
@@ -114,12 +104,12 @@ V = vertexAttachments(TR);
 numAdj = cellfun(@numel, V);
 
 [count,~] = hist(numAdj,1:10);
-disp('Histogram of Remeshed Surface:')
+disp('Histogram of number of faces neighboring each node:')
 disp(100*count / sum(count))
 
 % Calculate the max angles
 maxTheta = maxTriSurfAngle(NodeArray, ElementArray);
-disp('Mean Dihedral Angle: Remeshed Surface')
+disp('Mean Max Dihedral Angle: Remeshed Surface')
 disp(mean(maxTheta))
 
 % View remeshed surface 
@@ -131,7 +121,6 @@ if ismember("RemeshedSurface", plots)
     camlight headlight;
     drawnow; 
     daspect([1,1,1]);
-    set(gca, 'Zdir', 'reverse')
     hold off
 end
 
@@ -152,11 +141,6 @@ TR = triangulation(ElementArray, NodeArray);
 V = vertexAttachments(TR);
 numAdj = cellfun(@numel, V);
 
-[count,~] = hist(numAdj,1:10);
-disp('Histogram of Smoothed Surface')
-disp(100*count / sum(count))
-
-
 % Calculate the max angles
 maxTheta = maxTriSurfAngle(NodeArray, ElementArray);
 disp('Mean Dihedral Angle: Smoothed Surface:')
@@ -170,7 +154,6 @@ if ismember("SmoothedSurface",plots)
     gpatch(ElementArray, NodeArray,'gw'); 
     camlight headlight;
     daspect([1 1 1]);
-    set(gca, 'Zdir', 'reverse')
     drawnow; 
     hold off
 end
@@ -238,7 +221,6 @@ if tetFill == 1
         legend(hp,{'Input mesh','Interior point(s)'},'Location','NorthWestOutside');
         axisGeom(gca,fontSize); camlight headlight;
         colormap(cMap); icolorbar;
-        set(gca, 'Zdir', 'reverse')
         
         hs = subplot(1,2,2); hold on;
         title('Tetrahedral mesh','FontSize',fontSize);
@@ -247,7 +229,6 @@ if tetFill == 1
         optionStruct.hFig = [hf,hs];
         meshView(meshOutput,optionStruct);
         axisGeom(gca,fontSize);
-        set(gca, 'Zdir', 'reverse')
         gdrawnow;
     end 
 

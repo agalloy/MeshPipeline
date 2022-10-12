@@ -13,5 +13,5 @@ for i = 1:length(ElementArray)
     
     maxTheta(i) = max(theta);
 end
-disp('Normal Test')
+
 end
