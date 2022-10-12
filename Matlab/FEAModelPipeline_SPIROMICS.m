@@ -48,7 +48,6 @@ model_names = "LeftLung_Lobes";
 %   whole lung model use ["LL"]
 model_regions = {
                  "LTC"
-
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
@@ -61,7 +60,6 @@ anisotropy = {0};
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
 plot_list = ["InitialSurface","RemeshedSurface","SmoothedSurface"];
-
            
 %% Loop through each subject and generate the desired models
 num_subjects = length(subjects);
