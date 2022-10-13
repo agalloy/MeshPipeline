@@ -12,8 +12,8 @@ clc
 
 %% User parameters (Basic)
 % Segmentation mask directory and pattern
-mask_dir = '..\Segmentations';
-mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_testfill.nii';
+mask_dir = 'X:\FissureIntegrity\IntegrityNet_Data\';
+mask_pattern = '${SUBJECT}\seg\${SUBJECT}_V1_INSP_resampled.lobe.nii.gz';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio';
@@ -23,39 +23,38 @@ feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 disp_dir = '..\DispFields';
 
 % List of subjects to process (as string array)
-subjects = "H5972";
+subjects = "CU104808";
 
 %% User parameters (Advanced)
 % String array of segmentation regions names
 seg_regions = ["LL","LUL","LLL","RL","RUL","RML","RLL"];
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
-               [1,2]
-               1
-               2
-               [3,4,5]
-               4
-               5
+               [8,16]
+               8
+               16
+               [32,64,128]
+               32
+               64
+               128
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes_A0","LeftLung_Lobes_A1"];
+model_names = "LeftLung_Lobes";
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LL","LUL","LLL"], for a left lung
 %   whole lung model use ["LL"]
 model_regions = {
                  ["LL","LUL","LLL"]
-                 ["LL","LUL","LLL"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
                 [0,1,1]
-                [0,1,1]
                 };
 
 % Specify anisotropy setting to use for each model
-anisotropy = {0,1};
+anisotropy = {0};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh

@@ -74,7 +74,6 @@ if ismember("InitialSurface",plots)
     camlight headlight;
     drawnow; 
     daspect([1,1,1]);
-    set(gca, 'Zdir', 'reverse')
     hold off
 end
  
@@ -156,7 +155,6 @@ if ismember("SmoothedSurface",plots)
     gpatch(ElementArray, NodeArray,'gw'); 
     camlight headlight;
     daspect([1 1 1]);
-    set(gca, 'Zdir', 'reverse')
     drawnow; 
     hold off
 end
@@ -233,7 +231,6 @@ if tetFill == 1
         optionStruct.hFig = [hf,hs];
         meshView(meshOutput,optionStruct);
         axisGeom(gca,fontSize);
-        set(gca, 'Zdir', 'reverse')
         gdrawnow;
     end 
 
