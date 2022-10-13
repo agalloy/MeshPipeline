@@ -1,5 +1,10 @@
 # Matlab .asv files
 *.asv
+
+# Local folder
+Local\
+# Everything in the Local folder
+Local\**
 # Segmentation folder
 Segmentations\
 # Everything in the Segmentation folder
