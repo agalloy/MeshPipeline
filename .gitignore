@@ -1,2 +1,10 @@
 # Matlab .asv files
 *.asv
+# Segmentation folder
+Segmentations\
+# Everything in the Segmentation folder
+Segmentations\**
+# DispFields folder
+DispFields\
+# Everthing in the DispFields folder
+DispFields\**
