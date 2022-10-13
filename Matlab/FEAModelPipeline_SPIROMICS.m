@@ -28,6 +28,7 @@ subjects = "JH112317";
 %% User parameters (Advanced)
 % String array of segmentation regions names
 seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL"];
+
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
                [8,16]
@@ -47,6 +48,7 @@ model_names = "LeftLung_Lobes";
 %   whole lung model use ["LL"]
 model_regions = {
                  "LTC"
+
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
@@ -59,6 +61,7 @@ anisotropy = {0};
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
 plot_list = ["InitialSurface","RemeshedSurface","SmoothedSurface"];
+
            
 %% Loop through each subject and generate the desired models
 num_subjects = length(subjects);
