@@ -2,14 +2,14 @@
 *.asv
 
 # Local folder
-Local\
+Local/
 # Everything in the Local folder
-Local\**
+Local/**
 # Segmentation folder
-Segmentations\
+Segmentations/
 # Everything in the Segmentation folder
-Segmentations\**
+Segmentations/**
 # DispFields folder
-DispFields\
+DispFields/
 # Everthing in the DispFields folder
-DispFields\**
+DispFields/**
