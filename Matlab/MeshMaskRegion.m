@@ -4,10 +4,10 @@
 % Inputs: voxel_size, image, options
 %   voxel_size = dimensions of the image voxels in the file 
 %       image is a binary mask
-%   output_name = desired output name for the file generated 
+%   mask = binary image of the region to be meshed (1) and background (0)
 %   options = a structure containing additional options
 
-function [NodeArray, ElementArray] = MeshMaskRegion(voxel_size, image, options)
+function [NodeArray, ElementArray] = MeshMaskRegion(voxel_size, mask, options)
 %% Parse options structure
 if isfield(options,'tetFill')
     tetFill = options.tetFill;
@@ -38,7 +38,7 @@ end
 %% Step 1: Getting the levelsets from the segmentation
 
 % Convert segmentation into levelsets
-levelset = logic2levelset(image,voxel_size);
+levelset = logic2levelset(mask,voxel_size);
 
 % View zero points of levelset
 if ismember("LevelSet", plots)
@@ -121,7 +121,6 @@ if ismember("RemeshedSurface", plots)
     camlight headlight;
     drawnow; 
     daspect([1,1,1]);
-    set(gca, 'Zdir', 'reverse')
     hold off
 end
 
@@ -222,7 +221,6 @@ if tetFill == 1
         legend(hp,{'Input mesh','Interior point(s)'},'Location','NorthWestOutside');
         axisGeom(gca,fontSize); camlight headlight;
         colormap(cMap); icolorbar;
-        set(gca, 'Zdir', 'reverse')
         
         hs = subplot(1,2,2); hold on;
         title('Tetrahedral mesh','FontSize',fontSize);
