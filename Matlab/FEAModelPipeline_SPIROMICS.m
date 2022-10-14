@@ -19,6 +19,9 @@ mask_pattern = '${SUBJECT}\seg\${SUBJECT}_V1_INSP_resampled.lobe.nii.gz';
 feb_dir = '..\FEBio';
 feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 
+% Path to .feb template
+feb_template = 'FEBio_Template.feb'; % placeholder path
+
 % Displacement field directory
 disp_dir = '..\DispFields';
 
