@@ -43,10 +43,10 @@ model_names = ["LeftLung_Lobes_A0","LeftLung_Lobes_A1"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LL","LUL","LLL"], for a left lung
-%   whole lung model use ["LL"]
+%   whole lung model use ["LTC"]
 model_regions = {
-                 ["LL"]
-                 ["LL"]
+                 ["LTC"]
+                 ["LTC"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
@@ -55,7 +55,7 @@ model_tetFill = {
                 };
 
 % Specify anisotropy setting to use for each model
-anisotropy = {0,5};
+anisotropy = {0,1};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
