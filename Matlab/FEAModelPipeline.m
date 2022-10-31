@@ -13,7 +13,7 @@ clc
 %% User parameters (Basic)
 % Segmentation mask directory and pattern
 mask_dir = '..\Segmentations';
-mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_testfill.nii';
+mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.nii';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio';
@@ -59,7 +59,7 @@ anisotropy = {0,1};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = ["SmoothedSurface"];
+plot_list = ["FilledMesh", "SmoothedSurface"];
            
 %% Loop through each subject and generate the desired models
 num_subjects = length(subjects);
