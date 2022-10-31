@@ -13,7 +13,8 @@ clc
 %% User parameters (Basic)
 % Segmentation mask directory and pattern
 mask_dir = '..\Segmentations';
-mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.hdr';
+
+mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.nii';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio';
@@ -49,8 +50,8 @@ model_names = ["LeftLung_Lobes","RightLung_Lobes"];
 % e.g. For a left lung lobar model use ["LL","LUL","LLL"], for a left lung
 %   whole lung model use ["LTC"]
 model_regions = {
-                 ["LTC","LUL","LLL"]
-                 ["RTC","RUL","RML","RLL"]
+                 ["LTC"]
+                 ["LTC"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
@@ -64,6 +65,7 @@ anisotropy = {0,0};
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
 plot_list = "SmoothedSurface";
+
            
 %% Loop through each subject and generate the desired models
 num_subjects = length(subjects);
