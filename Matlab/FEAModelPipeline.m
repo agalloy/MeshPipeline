@@ -13,11 +13,15 @@ clc
 %% User parameters (Basic)
 % Segmentation mask directory and pattern
 mask_dir = '..\Segmentations';
+
 mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.nii';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio';
 feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
+
+% Path to .feb template
+feb_template = 'FEBioMesh_Template.feb';
 
 % Displacement field directory
 disp_dir = '..\DispFields';
@@ -30,16 +34,17 @@ subjects = "H5972";
 seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL"];
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
-               [1,2]
-               1
-               2
-               [3,4,5]
-               4
-               5
+               [8,16]
+               8
+               16
+               [32,64,128]
+               32
+               64
+               128
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes_A0","LeftLung_Lobes_A1"];
+model_names = ["LeftLung_Lobes","RightLung_Lobes"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LL","LUL","LLL"], for a left lung
@@ -50,21 +55,23 @@ model_regions = {
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
-                [0,1,1]
-                [0,1,1]
+                [0,0,0]
+                [0,0,0,0]
                 };
 
 % Specify anisotropy setting to use for each model
-anisotropy = {0,1};
+anisotropy = {0,0};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = ["FilledMesh", "SmoothedSurface"];
+plot_list = "SmoothedSurface";
+
            
 %% Loop through each subject and generate the desired models
 num_subjects = length(subjects);
 num_models = length(model_names);
 
+tic
 % Subject loop
 for i = 1:length(subjects)
     subject = char(subjects);
@@ -122,11 +129,19 @@ for i = 1:length(subjects)
             % Run mesh pipeline
             [NodeCells{k}, ElementCells{k}] = MeshMaskRegion( voxel_size, region_mask, options );
         end
-        
+      
         % Generate .feb file path
         feb_name = replace(feb_pattern,{'${SUBJECT}','${MODEL}'},{subject,model});
         feb_file = fullfile(feb_dir,feb_name);
+        
+        % Generate mesh2feb input structure
+        inStruct.NodeCells = NodeCells;
+        inStruct.ElementCells = ElementCells;
+        inStruct.model_regions = model_regions{j};
+        inStruct.disp_dir = disp_dir;
+        
         % Create mesh file
-        %mesh2feb(feb_file,ElementCells,NodeCells,disp_dir,'left')
+        mesh2feb(feb_file,feb_template,inStruct)
     end
 end
+toc
