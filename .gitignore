@@ -16,3 +16,7 @@ Segmentations/**
 DispFields/
 # Everthing in the DispFields folder
 DispFields/**
+# Images folder
+Images/
+# Everything in the Images folder
+Images/**

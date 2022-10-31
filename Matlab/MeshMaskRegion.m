@@ -53,7 +53,7 @@ end
 
 % Set parameters
 controlPar.contourLevel = 0;
-controlPar.voxelSize = voxel_size;
+controlPar.voxelSize = double(voxel_size);
 controlPar.nSub = [1 1 1];
 controlPar.capOpt = 1;
 
