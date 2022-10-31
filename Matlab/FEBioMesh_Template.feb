@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- This is a template file for creating FEBio Files with Matlab Scripts -->
+<febio_spec version="3.0">
+	<Mesh>
+	</Mesh>
+	<MeshDomains>
+	</MeshDomains>
+	<MeshData>
+	</MeshData>
+</febio_spec>

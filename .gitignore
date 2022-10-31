@@ -1,6 +1,9 @@
 # Matlab .asv files
 *.asv
 
+# .feb files containing mesh data
+*_Mesh.feb
+
 # Local folder
 Local/
 # Everything in the Local folder
@@ -13,3 +16,7 @@ Segmentations/**
 DispFields/
 # Everthing in the DispFields folder
 DispFields/**
+# Images folder
+Images/
+# Everything in the Images folder
+Images/**
