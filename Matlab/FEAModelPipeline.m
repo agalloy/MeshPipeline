@@ -14,7 +14,7 @@ clc
 % Segmentation mask directory and pattern
 mask_dir = '..\Segmentations';
 
-mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.nii';
+mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_filled.nii';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio';
@@ -34,13 +34,13 @@ subjects = "H5972";
 seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL"];
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
-               [8,16]
-               8
-               16
-               [32,64,128]
-               32
-               64
-               128
+               [1,2]
+               1
+               2
+               [3,4,5]
+               3
+               4
+               5
               };
 
 % String array of model names
@@ -50,7 +50,7 @@ model_names = ["LeftLung_Lobes","RightLung_Lobes"];
 % e.g. For a left lung lobar model use ["LL","LUL","LLL"], for a left lung
 %   whole lung model use ["LTC"]
 model_regions = {
-                 ["LTC"]
+                 ["RTC"]
                  ["LTC"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
