@@ -24,10 +24,11 @@ function mesh2feb(feb_file,feb_template,inStruct)
         model_regions = strrep( model_regions, '#', string(1:length(ElementCells)) );
     end
     % The directory containing displacement vector field info
-    if isfield(inStruct,'disp_dir')
-        disp_dir = inStruct.disp_dir;
+    if isfield(inStruct,'disp_pattern')
+        disp_pattern = inStruct.disp_pattern;
     else
-        disp_dir = '';
+        disp_pattern = '';
+        warning('Missing displacement field data. Model boundary condition data will be missing.')
     end
     % The thickness for shell elements
     if isfield(inStruct,'shell_thickness')
@@ -79,6 +80,14 @@ function mesh2feb(feb_file,feb_template,inStruct)
             regStruct.shell_thickness = shell_thickness;
             % Add the shell domain to the .feb file
             feb_str = febShell(feb_str, regStruct);
+            
+            % If displacement data is available add displacement mesh data
+            if ~isempty(disp_pattern)
+                DispArray = SampleDispField( NodeArray, disp_pattern );
+                regStruct.NodeData = DispArray;
+                regStruct.NodeVars = {'chestwallDisp_x','chestwallDisp_y','chestwallDisp_z'};
+                feb_str = febNodeData( feb_str, regStruct );
+            end
         else
             error('Unrecognized element type.')
         end
