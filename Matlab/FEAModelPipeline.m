@@ -33,13 +33,13 @@ subjects = "H5972";
 seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL"];
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
-               [8,16]
-               8
-               16
-               [32,64,128]
-               32
-               64
-               128
+               [1,2]
+               1
+               2
+               [3,4,5]
+               3
+               4
+               5
               };
 
 % String array of model names

@@ -80,6 +80,8 @@ orthosliceViewer(mask)
 
 %% Export to .nii file
 
-filename = [patientID, '_baseTLC_lobemask_filled.nii'];
-niftiwrite(mask, filename, mask_info);
+out_name = [patientID, '_baseTLC_lobemask_filled.nii'];
+out_dir = mask_dir;
+out_path = fullfile(out_dir, out_name);
+niftiwrite(mask, out_path, mask_info);
 
