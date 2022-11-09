@@ -43,7 +43,7 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes"];
+model_names = ["LeftLung_Lobes","RightLung_Lobes"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung

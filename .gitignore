@@ -1,8 +1,15 @@
 # Matlab .asv files
 *.asv
 
-# .feb files containing mesh data
-*_Mesh.feb
+# All .feb files except templates
+*.feb
+!*_Template.feb
+
+# All .log files
+*.log
+
+# All .xplt files
+*.xplt
 
 # Local folder
 Local/
