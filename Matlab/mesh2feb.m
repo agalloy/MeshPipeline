@@ -102,7 +102,7 @@ function mesh2feb(feb_file,feb_template,inStruct)
         
         % Add surface pair to .feb text
         sp_head = sprintf('\t\t<SurfacePair name="%s-%s">\r\n',psurf,ssurf);
-        sp_body = sprintf('\t\t\t<primary>%s</primary>\r\n\t\t\t<secondary>%s</secondary>\r\n',psurf,ssurf);
+        sp_body = sprintf('\t\t\t<primary>%s</primary>\r\n\t\t\t<secondary>%s</secondary>\r\n',[psurf,'_surface'],[ssurf,'_surface']);
         sp_foot = sprintf('\t\t</SurfacePair>\r\n');
         sp_sect = [sp_head,sp_body,sp_foot];
         feb_str = insertBefore(feb_str,sprintf('\t</Mesh>\r\n'),sp_sect);
