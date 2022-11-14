@@ -81,13 +81,8 @@ end
 % Calculating number of nodes required for given point spacing
 pointSpacing = 6; % Desired point spacing 
 
-A = patchArea(ElementArray, NodeArray); % Areas of current faces
-totalArea = sum( A ); % Total area
-l = sqrt(totalArea); % Width or length of square with same size
-numPoints = round((l./pointSpacing).^2); % Point spacing for mesh in virtual square
-
 % Remesh options
-optionStruct.nb_pts = numPoints;
+optionStruct.pointSpacing = pointSpacing;
 optionStruct.anisotropy = anisotropy;
 [ElementArray, NodeArray] = ggremesh(ElementArray, NodeArray, optionStruct);
 
