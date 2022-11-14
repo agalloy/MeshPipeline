@@ -21,8 +21,8 @@ subjects = "H5972";
 model_params = "${SIDE}";
 % Values to set those parameters to (M x P string array)
 % M is the number of models, P is the number of parameters
-model_values = ["Left"
-                "Right"];
+model_values = "Right";
+
             
 % Set the tasks to perform
 generate_feb = true; % Generate .feb input files
