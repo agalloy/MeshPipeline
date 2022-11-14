@@ -96,7 +96,7 @@
 			<smooth_aug>0</smooth_aug>
 			<node_reloc>0</node_reloc>
 			<flip_primary>0</flip_primary>
-			<flip_secondary>0</flip_secondary>
+			<flip_secondary>1</flip_secondary>
 			<knmult>0</knmult>
 			<update_penalty>0</update_penalty>
 		</contact>
@@ -118,7 +118,7 @@
 			<smooth_aug>0</smooth_aug>
 			<node_reloc>0</node_reloc>
 			<flip_primary>0</flip_primary>
-			<flip_secondary>0</flip_secondary>
+			<flip_secondary>1</flip_secondary>
 			<knmult>0</knmult>
 			<update_penalty>0</update_penalty>
 		</contact>
@@ -140,7 +140,7 @@
 			<smooth_aug>0</smooth_aug>
 			<node_reloc>0</node_reloc>
 			<flip_primary>0</flip_primary>
-			<flip_secondary>0</flip_secondary>
+			<flip_secondary>1</flip_secondary>
 			<knmult>0</knmult>
 			<update_penalty>0</update_penalty>
 		</contact>
