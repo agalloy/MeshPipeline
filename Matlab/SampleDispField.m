@@ -14,6 +14,7 @@ function disp = SampleDispField(X,disp_pattern)
     
     % Coordinate axes to loop through
     axes = {'x','y','z'};
+    axes_ind = [2,1,3];
     
     % Loop through each axis sampling disp data
     for i = 1:numel(axes)
@@ -36,6 +37,6 @@ function disp = SampleDispField(X,disp_pattern)
         Pu = dvf;
                 
         % Get displacements at query points with linear interpolation
-        disp(:,i) = interp3(Py,Px,Pz,Pu,X(:,2),X(:,1),X(:,3),'linear');
+        disp(:,axes_ind(i)) = interp3(Py,Px,Pz,Pu,X(:,2),X(:,1),X(:,3),'linear');
     end
 end
