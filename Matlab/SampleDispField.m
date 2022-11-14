@@ -12,14 +12,6 @@ function disp = SampleDispField(X,disp_pattern)
     % Initialize displacement array
     disp = nan( size(X,1), 3 );
     
-    % Get model bounds (plus a buffer of 5 mm)
-    x_min = min(X(:,1)) - 5;
-    x_max = max(X(:,1)) + 5;
-    y_min = min(X(:,2)) - 5;
-    y_max = max(X(:,2)) + 5;
-    z_min = min(X(:,3)) - 5;
-    z_max = max(X(:,3)) + 5;
-    
     % Coordinate axes to loop through
     axes = {'x','y','z'};
     
@@ -42,17 +34,8 @@ function disp = SampleDispField(X,disp_pattern)
         Py = double( (ind_i-1) * dvf_spacing(1) );
         Pz = double( (ind_k-1) * dvf_spacing(3) );
         Pu = dvf;
-        
-        % Remove points far away from ROI to reduce computing time
-        %P_in = (Px < x_max) & (Px > x_min); 
-        %P_in = P_in & (Py < y_max) & (Py > y_min);
-        %P_in = P_in & (Pz < z_max) & (Pz > z_min);
-        %Px = Px(P_in);
-        %Py = Py(P_in);
-        %Pz = Pz(P_in);
-        %Pu = Pu(P_in);
                 
         % Get displacements at query points with linear interpolation
-        disp(:,i) = interp3(Px,Py,Pz,Pu,X(:,1),X(:,2),X(:,3),'linear');
+        disp(:,i) = interp3(Py,Px,Pz,Pu,X(:,2),X(:,1),X(:,3),'linear');
     end
 end
