@@ -26,7 +26,7 @@ feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 feb_template = 'FEBioMesh_Template.feb';
 
 % List of subjects to process (as string array)
-subjects = "H5972";
+subjects = "MU160763";
 
 %% User parameters (Advanced)
 % String array of segmentation regions names
@@ -43,7 +43,7 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes","RightLung_Lobes"];
+model_names = ["LeftLung_Lobes"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
@@ -63,7 +63,7 @@ anisotropy = {0,0};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = "none";
+plot_list = ["SmoothedSurface", "FilledMesh"];
 
            
 %% Loop through each subject and generate the desired models
