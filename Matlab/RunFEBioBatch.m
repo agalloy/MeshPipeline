@@ -21,7 +21,7 @@ subjects = "H5972";
 model_params = "${SIDE}";
 % Values to set those parameters to (M x P string array)
 % M is the number of models, P is the number of parameters
-model_values = "Right";
+model_values = "Left";
 
             
 % Set the tasks to perform

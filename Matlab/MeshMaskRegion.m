@@ -178,7 +178,7 @@ if tetFill == 1
     V_regions = getInnerPoint(ElementArray, NodeArray); %Define region points
     V_holes = []; %Define hole points
     [regionTetVolumes] = tetVolMeanEst(ElementArray, NodeArray); %Volume estimate for regular tets
-    stringOpt = '-pq1.2AaY'; %Options for tetgen
+    stringOpt = '-pqAaY'; %Options for tetgen
     
     % Creating tetgen input structure
     inputStruct.stringOpt = stringOpt; %Tetgen options
