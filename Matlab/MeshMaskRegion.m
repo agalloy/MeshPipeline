@@ -206,12 +206,11 @@ if tetFill == 1
         cMap = gjet(4);
         patchColor = cMap(1,:);
         markerSize = 25;
-        NodeArrayP = NodeArray.*[1,1,-1];
         
         hf=cFigure;
         subplot(1,2,1); hold on;
         title('Input boundaries','FontSize',fontSize);
-        hp(1) = gpatch(Fb,NodeArrayP,Cb,'k',faceAlpha1);
+        hp(1) = gpatch(Fb,NodeArray,Cb,'k',faceAlpha1);
         hp(2) = plotV(V_regions,'r.','MarkerSize',markerSize);
         legend(hp,{'Input mesh','Interior point(s)'},'Location','NorthWestOutside');
         axisGeom(gca,fontSize); camlight headlight;
