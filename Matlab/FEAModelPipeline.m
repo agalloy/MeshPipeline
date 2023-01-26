@@ -16,7 +16,10 @@ mask_dir = '..\Segmentations';
 mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_filled.nii';
 
 % Displacement field pattern
-disp_pattern = '..\DispFields\${SUBJECT}\RegMask_Both\Disp12_${AXIS}_1_1_1_4_4_4.hdr';
+% Old data
+%disp_pattern = '..\DispFields\${SUBJECT}\RegMask_Both\Disp12_${AXIS}_1_1_1_4_4_4.hdr';
+% New data
+disp_pattern = '..\DispFields\${SUBJECT}\SSTVD_Both\deformationField.nii.gz';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio\Meshes';
@@ -26,7 +29,7 @@ feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 feb_template = 'FEBioMesh_Template.feb';
 
 % List of subjects to process (as string array)
-subjects = "MU160763";
+subjects = "UT172269";
 
 %% User parameters (Advanced)
 % String array of segmentation regions names
@@ -63,7 +66,7 @@ anisotropy = {0,0};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = ["SmoothedSurface", "FilledMesh"];
+plot_list = ["SmoothedSurface"];
 
            
 %% Loop through each subject and generate the desired models
