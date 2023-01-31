@@ -66,7 +66,7 @@ anisotropy = {0,0};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = ["SmoothedSurface"];
+plot_list = ["none"];
 
            
 %% Loop through each subject and generate the desired models
@@ -128,6 +128,7 @@ for i = 1:length(subjects)
             options.tetFill = model_tetFill{j}(k);
             options.plots = plot_list;
             options.anisotropy = anisotropy{j};
+            options.maskTransform = mask_info.Transform.T;
             % Run mesh pipeline
             [NodeCells{k}, ElementCells{k}] = MeshMaskRegion( voxel_size, region_mask, options );
         end
