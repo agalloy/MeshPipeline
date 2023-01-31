@@ -54,7 +54,7 @@ function dispArray = SampleDispField(X,disp_pattern)
         ind_k = (1:dvf_size(3))';       
         Px = double( (ind_j - 0.5) * dvf_spacing(2) ) - dvf_origin(2);
         Py = double( (ind_i - 0.5) * dvf_spacing(1) ) - dvf_origin(1);
-        Pz = double( (ind_k - 0.5) * dvf_spacing(3) ) - dvf_origin(3);
+        Pz = double( (ind_k - 0.5) * dvf_spacing(3) ) + dvf_origin(3);
         Pu = dvf;
 
         % Get displacements at query points with linear interpolation
@@ -64,18 +64,5 @@ function dispArray = SampleDispField(X,disp_pattern)
         if any(isnan(dispArray(:,axes_ind(i))))
             warning('\nNaN detected in DispArray %s component\n',axes{i})
         end
-
-        % Debugging:
-        % Check if there are any nans in disp field image
-        disp( any(isnan(Pu), 'all') )
     end
-    % Check dvf spacing
-    disp(dvf_spacing)
-    % Check if any mesh points are outside the disp field image
-    image_bbox = [min(Px,[],'all'), min(Py,[],'all'), min(Pz,[],'all')
-                  max(Px,[],'all'), max(Py,[],'all'), max(Pz,[],'all')];
-    disp(image_bbox)
-    model_bbox = [min(X(:,1),[],'all'), min(X(:,2),[],'all'), min(X(:,3),[],'all')
-                  max(X(:,1),[],'all'), max(X(:,2),[],'all'), max(X(:,3),[],'all')];
-    disp(model_bbox)
 end

@@ -66,7 +66,7 @@ controlPar.capOpt = 1;
 [ElementArray, NodeArray] = levelset2isosurface(levelset, controlPar);
 
 % Give NodeArray in terms of image origin
-NodeArray = NodeArray - origin([2,1,3]);
+NodeArray = NodeArray + origin([2,1,3]) .* [-1,-1,1];
 
 % Check for holes in mesh using Euler Characteristic
 chi = eulerChar(ElementArray, NodeArray);

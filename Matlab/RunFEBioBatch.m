@@ -15,13 +15,13 @@ mesh_dir = '..\FEBio\Meshes';
 mesh_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_Mesh.feb';
 
 % Subjects to run (string array)
-subjects = "H5972";
+subjects = "UT172269";
 
 % Model parameters to change in template (1 x P string array)
 model_params = "${SIDE}";
 % Values to set those parameters to (M x P string array)
 % M is the number of models, P is the number of parameters
-model_values = "Left";
+model_values = "Right";
 
             
 % Set the tasks to perform

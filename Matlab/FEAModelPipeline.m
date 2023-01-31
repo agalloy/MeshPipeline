@@ -46,7 +46,7 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes"];
+model_names = ["LeftLung_Lobes","RightLung_Lobes"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
@@ -102,6 +102,8 @@ for i = 1:length(subjects)
     end
     % Get voxel size
     voxel_size = mask_info.PixelDimensions(1:3);
+    % Get image transformation matrix
+    maskTransform = mask_info.Transform.T;
     
 % Loop generating each model for the current subject
     for j = 1:num_models
@@ -127,7 +129,7 @@ for i = 1:length(subjects)
             options.tetFill = model_tetFill{j}(k);
             options.plots = plot_list;
             options.anisotropy = anisotropy{j};
-            options.maskTransform = mask_info.Transform.T;
+            options.maskTransform = maskTransform;
             % Run mesh pipeline
             [NodeCells{k}, ElementCells{k}] = MeshMaskRegion( voxel_size, region_mask, options );
         end
