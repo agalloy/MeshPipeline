@@ -18,11 +18,13 @@ function dispArray = SampleDispField(X,disp_pattern)
         dvf_info = niftiinfo(disp_pattern);
         dvf_full = niftiread(disp_pattern);
         dvf_spacing = dvf_info.PixelDimensions(1:3);
+        dvf_origin = dvf_info.Transform.T(4,1:3);
         together = true;        
         % Coordinate axes to loop through
         axes = {'x','y','z'};
         axes_ind = [2,1,3];
     else
+        dvf_origin = [0,0,0];
         % Coordinate axes to loop through
         axes = {'x','y','z'};
         axes_ind = [2,1,3];
@@ -47,15 +49,33 @@ function dispArray = SampleDispField(X,disp_pattern)
         end
         
         % Convert the voxel centers to a set of points
-        ind_i = 1:dvf_size(1);
-        ind_j = 1:dvf_size(2);
-        ind_k = 1:dvf_size(3);       
-        Px = double( (ind_j-1) * dvf_spacing(2) );
-        Py = double( (ind_i-1) * dvf_spacing(1) );
-        Pz = double( (ind_k-1) * dvf_spacing(3) );
+        ind_i = (1:dvf_size(1))';
+        ind_j = (1:dvf_size(2))';
+        ind_k = (1:dvf_size(3))';       
+        Px = double( (ind_j - 0.5) * dvf_spacing(2) ) - dvf_origin(2);
+        Py = double( (ind_i - 0.5) * dvf_spacing(1) ) - dvf_origin(1);
+        Pz = double( (ind_k - 0.5) * dvf_spacing(3) ) - dvf_origin(3);
         Pu = dvf;
 
         % Get displacements at query points with linear interpolation
         dispArray(:,axes_ind(i)) = interp3(Px,Py,Pz,Pu,X(:,1),X(:,2),X(:,3),'linear');
+
+        % Check if interpolation was sucessful at every point:
+        if any(isnan(dispArray(:,axes_ind(i))))
+            warning('\nNaN detected in DispArray %s component\n',axes{i})
+        end
+
+        % Debugging:
+        % Check if there are any nans in disp field image
+        disp( any(isnan(Pu), 'all') )
     end
+    % Check dvf spacing
+    disp(dvf_spacing)
+    % Check if any mesh points are outside the disp field image
+    image_bbox = [min(Px,[],'all'), min(Py,[],'all'), min(Pz,[],'all')
+                  max(Px,[],'all'), max(Py,[],'all'), max(Pz,[],'all')];
+    disp(image_bbox)
+    model_bbox = [min(X(:,1),[],'all'), min(X(:,2),[],'all'), min(X(:,3),[],'all')
+                  max(X(:,1),[],'all'), max(X(:,2),[],'all'), max(X(:,3),[],'all')];
+    disp(model_bbox)
 end

@@ -35,6 +35,12 @@ if isfield(options,'anisotropy')
 else
     anisotropy = 0;
 end
+if isfield(options,'maskTransform')
+    maskTransform = options.maskTransform;
+    origin = maskTransform(4,1:3);
+else
+    origin = [0,0,0];
+end
 %% Step 1: Getting the levelsets from the segmentation
 
 % Convert segmentation into levelsets
@@ -58,6 +64,9 @@ controlPar.nSub = [1 1 1];
 controlPar.capOpt = 1;
 
 [ElementArray, NodeArray] = levelset2isosurface(levelset, controlPar);
+
+% Give NodeArray in terms of image origin
+NodeArray = NodeArray - origin([2,1,3]);
 
 % Check for holes in mesh using Euler Characteristic
 chi = eulerChar(ElementArray, NodeArray);
