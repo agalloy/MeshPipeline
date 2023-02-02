@@ -14,6 +14,11 @@ if isfield(options,'tetFill')
 else
     tetFill = 0;
 end
+if isfield(options,'tetFactor')
+    tetFactor = options.tetFactor;
+else
+    tetFactor = 1;
+end
 if isfield(options,'stl_file')
     save_stl = 1;
     stl_file = options.stl_file;
@@ -186,7 +191,7 @@ if tetFill == 1
     C = ones(size(ElementArray,1),1); %Face boundary markers (aka face colors)
     V_regions = getInnerPoint(ElementArray, NodeArray); %Define region points
     V_holes = []; %Define hole points
-    [regionTetVolumes] = tetVolMeanEst(ElementArray, NodeArray); %Volume estimate for regular tets
+    [regionTetVolumes] = tetVolMeanEst(ElementArray, NodeArray)*tetFactor; %Volume estimate for regular tets
     stringOpt = '-pqAaY'; %Options for tetgen
     
     % Creating tetgen input structure

@@ -46,7 +46,7 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes","RightLung_Lobes"];
+model_names = ["LeftLung_Lobes_tf2","RightLung_Lobes_tf2"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
@@ -63,6 +63,7 @@ model_tetFill = {
 
 % Specify anisotropy setting to use for each model
 anisotropy = {0,0};
+tetFactor = {2,2};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
@@ -131,6 +132,7 @@ for i = 1:length(subjects)
             options.plots = plot_list;
             options.anisotropy = anisotropy{j};
             options.maskTransform = maskTransform;
+            options.tetFactor = tetFactor{j};
             % Run mesh pipeline
             [NodeCells{k}, ElementCells{k}] = MeshMaskRegion( voxel_size, region_mask, options );
         end
