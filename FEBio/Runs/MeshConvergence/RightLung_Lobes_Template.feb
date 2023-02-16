@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ Version 1.0 of the model without prestrain or gravity. 
+-->
+<febio_spec version="3.0">
+	<Module type="solid"/>
+	<Control>
+		<analysis>STATIC</analysis>
+		<time_steps>20</time_steps>
+		<step_size>0.05</step_size>
+        <output_level>OUTPUT_MAJOR_ITRS</output_level>
+		<solver>
+			<max_refs>50</max_refs>
+			<max_ups>0</max_ups>
+			<diverge_reform>1</diverge_reform>
+			<reform_each_time_step>1</reform_each_time_step>
+			<dtol>0.001</dtol>
+			<etol>0.01</etol>
+			<rtol>0</rtol>
+			<lstol>0.9</lstol>
+			<min_residual>1e-20</min_residual>
+			<qnmethod>BFGS</qnmethod>
+			<rhoi>0</rhoi>
+			<symmetric_stiffness>0</symmetric_stiffness>
+		</solver>
+		<time_stepper>
+			<dtmin>0</dtmin>
+			<dtmax>0.05</dtmax>
+			<max_retries>4</max_retries>
+			<opt_iter>50</opt_iter>
+		</time_stepper>
+	</Control>
+	<Globals>
+		<Constants>
+			<T>0</T>
+			<R>0</R>
+			<Fc>0</Fc>
+		</Constants>
+	</Globals>
+	<Material>
+		<material id="1" name="Mat1" type="neo-Hookean">
+			<density>1</density>
+			<E>0.003</E>
+			<v>0.30</v>
+		</material>
+		<material id="2" name="Mat2" type="neo-Hookean">
+			<density>1</density>
+			<E>0.003</E>
+			<v>0.30</v>
+		</material>
+		<material id="3" name="Mat3" type="neo-Hookean">
+			<density>1</density>
+			<E>0.003</E>
+			<v>0.30</v>
+		</material>
+		<material id="4" name="Mat4" type="neo-Hookean">
+			<density>1</density>
+			<E>0.003</E>
+			<v>0.30</v>
+		</material>
+	</Material>
+	<Include>${MESHFILE}</Include>
+	<Boundary>
+		<bc name="chestwall" type="prescribe" node_set="RTC">
+			<dof>x</dof>
+			<scale lc="1" type="map">chestwallDisp_x</scale>
+			<relative>0</relative>
+		</bc>
+		<bc name="chestwall" type="prescribe" node_set="RTC">
+			<dof>y</dof>
+			<scale lc="1" type="map">chestwallDisp_y</scale>
+			<relative>0</relative>
+		</bc>
+		<bc name="chestwall" type="prescribe" node_set="RTC">
+			<dof>z</dof>
+			<scale lc="1" type="map">chestwallDisp_z</scale>
+			<relative>0</relative>
+		</bc>
+	</Boundary>
+	<Contact>
+		<contact type="sliding-elastic" name="RUL-RTC" surface_pair="RUL-RTC">
+			<laugon>1</laugon>
+			<tolerance>0.2</tolerance>
+			<gaptol>0</gaptol>
+			<penalty>1</penalty>
+			<auto_penalty>1</auto_penalty>
+			<two_pass>0</two_pass>
+			<search_tol>0.01</search_tol>
+			<symmetric_stiffness>0</symmetric_stiffness>
+			<search_radius>5</search_radius>
+			<seg_up>0</seg_up>
+			<tension>0</tension>
+			<minaug>0</minaug>
+			<maxaug>10</maxaug>
+			<fric_coeff>0</fric_coeff>
+			<smooth_aug>0</smooth_aug>
+			<node_reloc>0</node_reloc>
+			<flip_primary>0</flip_primary>
+			<flip_secondary>1</flip_secondary>
+			<knmult>0</knmult>
+			<update_penalty>0</update_penalty>
+		</contact>
+		<contact type="sliding-elastic" name="RML-RTC" surface_pair="RML-RTC">
+			<laugon>1</laugon>
+			<tolerance>0.2</tolerance>
+			<gaptol>0</gaptol>
+			<penalty>1</penalty>
+			<auto_penalty>1</auto_penalty>
+			<two_pass>0</two_pass>
+			<search_tol>0.01</search_tol>
+			<symmetric_stiffness>0</symmetric_stiffness>
+			<search_radius>5</search_radius>
+			<seg_up>0</seg_up>
+			<tension>0</tension>
+			<minaug>0</minaug>
+			<maxaug>10</maxaug>
+			<fric_coeff>0</fric_coeff>
+			<smooth_aug>0</smooth_aug>
+			<node_reloc>0</node_reloc>
+			<flip_primary>0</flip_primary>
+			<flip_secondary>1</flip_secondary>
+			<knmult>0</knmult>
+			<update_penalty>0</update_penalty>
+		</contact>
+		<contact type="sliding-elastic" name="RLL-RTC" surface_pair="RLL-RTC">
+			<laugon>1</laugon>
+			<tolerance>0.2</tolerance>
+			<gaptol>0</gaptol>
+			<penalty>1</penalty>
+			<auto_penalty>1</auto_penalty>
+			<two_pass>0</two_pass>
+			<search_tol>0.01</search_tol>
+			<symmetric_stiffness>0</symmetric_stiffness>
+			<search_radius>5</search_radius>
+			<seg_up>0</seg_up>
+			<tension>0</tension>
+			<minaug>0</minaug>
+			<maxaug>10</maxaug>
+			<fric_coeff>0</fric_coeff>
+			<smooth_aug>0</smooth_aug>
+			<node_reloc>0</node_reloc>
+			<flip_primary>0</flip_primary>
+			<flip_secondary>1</flip_secondary>
+			<knmult>0</knmult>
+			<update_penalty>0</update_penalty>
+		</contact>
+		<contact type="sliding-elastic" name="RML-RUL" surface_pair="RML-RUL">
+			<laugon>1</laugon>
+			<tolerance>0.2</tolerance>
+			<gaptol>0</gaptol>
+			<penalty>1</penalty>
+			<auto_penalty>1</auto_penalty>
+			<two_pass>1</two_pass>
+			<search_tol>0.01</search_tol>
+			<symmetric_stiffness>0</symmetric_stiffness>
+			<search_radius>5</search_radius>
+			<seg_up>0</seg_up>
+			<tension>0</tension>
+			<minaug>0</minaug>
+			<maxaug>10</maxaug>
+			<fric_coeff>0</fric_coeff>
+			<smooth_aug>0</smooth_aug>
+			<node_reloc>0</node_reloc>
+			<flip_primary>0</flip_primary>
+			<flip_secondary>0</flip_secondary>
+			<knmult>0</knmult>
+			<update_penalty>0</update_penalty>
+		</contact>
+		<contact type="sliding-elastic" name="RLL-RUL" surface_pair="RLL-RUL">
+			<laugon>1</laugon>
+			<tolerance>0.2</tolerance>
+			<gaptol>0</gaptol>
+			<penalty>1</penalty>
+			<auto_penalty>1</auto_penalty>
+			<two_pass>1</two_pass>
+			<search_tol>0.01</search_tol>
+			<symmetric_stiffness>0</symmetric_stiffness>
+			<search_radius>5</search_radius>
+			<seg_up>0</seg_up>
+			<tension>0</tension>
+			<minaug>0</minaug>
+			<maxaug>10</maxaug>
+			<fric_coeff>0</fric_coeff>
+			<smooth_aug>0</smooth_aug>
+			<node_reloc>0</node_reloc>
+			<flip_primary>0</flip_primary>
+			<flip_secondary>0</flip_secondary>
+			<knmult>0</knmult>
+			<update_penalty>0</update_penalty>
+		</contact>
+		<contact type="sliding-elastic" name="RLL-RML" surface_pair="RLL-RML">
+			<laugon>1</laugon>
+			<tolerance>0.2</tolerance>
+			<gaptol>0</gaptol>
+			<penalty>1</penalty>
+			<auto_penalty>1</auto_penalty>
+			<two_pass>1</two_pass>
+			<search_tol>0.01</search_tol>
+			<symmetric_stiffness>0</symmetric_stiffness>
+			<search_radius>5</search_radius>
+			<seg_up>0</seg_up>
+			<tension>0</tension>
+			<minaug>0</minaug>
+			<maxaug>10</maxaug>
+			<fric_coeff>0</fric_coeff>
+			<smooth_aug>0</smooth_aug>
+			<node_reloc>0</node_reloc>
+			<flip_primary>0</flip_primary>
+			<flip_secondary>0</flip_secondary>
+			<knmult>0</knmult>
+			<update_penalty>0</update_penalty>
+		</contact>
+	</Contact>
+	<LoadData>
+		<load_controller id="1" type="loadcurve">
+			<interpolate>SMOOTH</interpolate>
+			<points>
+				<point>0,0</point>
+				<point>1,1</point>
+			</points>
+		</load_controller>
+	</LoadData>
+	<Output>
+		<plotfile type="febio">
+			<var type="contact area"/>
+			<var type="contact force"/>
+			<var type="contact gap"/>
+			<var type="contact traction"/>
+			<var type="contact penalty"/>
+			<var type="contact pressure"/>
+			<var type="displacement"/>
+			<var type="relative volume"/>
+			<var type="stress"/>
+			<var type="density"/>
+			<var type="surface traction"/>
+		</plotfile>
+	</Output>
+</febio_spec>
