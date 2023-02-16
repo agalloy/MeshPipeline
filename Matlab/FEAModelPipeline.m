@@ -9,6 +9,9 @@
 %% Initialize MATLAB
 clear
 clc
+if ~exist('logic2levelset')
+    addpath(genpath('../../../GibbonCode'))
+end
 
 %% User parameters (Basic)
 % Segmentation mask directory and pattern
@@ -22,7 +25,7 @@ mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.nii';
 disp_pattern = '..\DispFields\${SUBJECT}\SSTVD_Both\deformationField.nii.gz';
 
 % Output febio mesh model directory and pattern
-feb_dir = '..\FEBio\Meshes';
+feb_dir = '..\FEBio\Meshes\MeshConvergence';
 feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 
 % Path to .feb template
@@ -46,24 +49,24 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes_tf2","RightLung_Lobes_tf2"];
+model_names = ["RightLung_Lobes_tf1.1","RightLung_Lobes_tf1.2"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
 %   whole lung model use ["LTC"]
 model_regions = {
-                 ["LTC","LUL","LLL"]
+                 ["RTC","RUL","RML","RLL"]
                  ["RTC","RUL","RML","RLL"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
-                [0,1,1]
+                [0,1,1,1]
                 [0,1,1,1]
                 };
 
 % Specify anisotropy setting to use for each model
 anisotropy = {0,0};
-tetFactor = {2,2};
+tetFactor = {1.1,1.2};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
