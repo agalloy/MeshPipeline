@@ -120,6 +120,10 @@ disp(100*count / sum(count))
 maxTheta = maxTriSurfAngle(NodeArray, ElementArray);
 disp('Mean Max Dihedral Angle: Remeshed Surface')
 disp(mean(maxTheta))
+% Calculate the volume of the model
+modelVol_remesh = triSurfVolume( ElementArray, NodeArray );
+disp('Model Volume: Remeshed Surface')
+disp(modelVol_remesh)
 
 % View remeshed surface 
 if ismember("RemeshedSurface", plots)
@@ -154,6 +158,13 @@ numAdj = cellfun(@numel, V);
 maxTheta = maxTriSurfAngle(NodeArray, ElementArray);
 disp('Mean Dihedral Angle: Smoothed Surface:')
 disp(mean(maxTheta))
+% Calculate the volume of the model
+modelVol_smooth = triSurfVolume( ElementArray, NodeArray );
+disp('Model Volume: Smoothed Surface')
+disp(modelVol_smooth)
+disp('%Original volume:')
+disp( modelVol_smooth / modelVol_remesh * 100 )
+
 
 % View smoothed surface 
 if ismember("SmoothedSurface",plots)
