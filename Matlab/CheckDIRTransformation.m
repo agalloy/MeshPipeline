@@ -6,135 +6,157 @@ clear
 clc
 tic
 %% User Parameters
-% TLC Mask
-mask_dir = 'X:\FissureIntegrity\IntegrityNet_Data\';
-TLC_name = 'UT172269\seg\UT172269_V1_INSP_resampled.lobe.nii.gz';
-% FRC Mask
-FRC_name = 'UT172269\seg\UT172269_V1_EXP_resampled.lobe.nii.gz';
-% DVF Data
-dvf_dir = 'W:\BioMechStudy_Visit1_AllSub\normal';
-dvf_file = '..\DispFields\UT172269\SSTVD_Both\deformationField.nii.gz';
+subject = 'UT172269';
+side = 'left';
 
+% TLC Mask
+mask_dir_pattern = 'X:\FissureIntegrity\IntegrityNet_Data\${SUBJECT}\seg';
+EI_name_pattern = '${SUBJECT}_V1_INSP_resampled.lobe.nii.gz';
+% FRC Mask
+EE_name_pattern = '${SUBJECT}_V1_EXP_resampled.lobe.nii.gz';
+% DVF Data
+dvf_dir_pattern = 'X:\segerard\${SITE}\${SUBJECT}\registration\exp_to_insp\${SIDE}';
+dvf_name_pattern = 'Disp.nii.gz';
+
+% Mask segments to use
+if strcmp(side,'left')
+    seg_maskIDs = [8,16];
+elseif strcmp(side,'right')
+    seg_maskIDs = [32,64,128];
+end
 %% Open mask and dvf files and metadata
+% Complete patterns
+site = subject(1:2);
+mask_dir = replace( mask_dir_pattern, {'${SUBJECT}','${SITE}','${SIDE}'}, {subject,site,side} );
+EI_name = replace( EI_name_pattern, {'${SUBJECT}','${SITE}','${SIDE}'}, {subject,site,side} );
+EE_name = replace( EE_name_pattern, {'${SUBJECT}','${SITE}','${SIDE}'}, {subject,site,side} );
+dvf_dir = replace( dvf_dir_pattern, {'${SUBJECT}','${SITE}','${SIDE}'}, {subject,site,side} );
+dvf_name = replace( dvf_name_pattern, {'${SUBJECT}','${SITE}','${SIDE}'}, {subject,site,side} );
+
 % TLC
-TLC_file = fullfile(mask_dir,TLC_name);
-TLC_info = niftiinfo(TLC_file);
-TLC_mask = niftiread(TLC_info);
-T_TLC = TLC_info.Transform.T;
-TLC_size = size(TLC_mask);
+EI_file = fullfile(mask_dir,EI_name);
+EI_info = niftiinfo(EI_file);
+EI_mask = niftiread(EI_info);
+T_EI = EI_info.Transform.T;
+EI_size = size(EI_mask);
 
 % FRC
-FRC_file = fullfile(mask_dir,FRC_name);
-FRC_info = niftiinfo(FRC_file);
-FRC_mask = niftiread(FRC_info);
-T_FRC = FRC_info.Transform.T;
-FRC_size = size(FRC_mask);
+EE_file = fullfile(mask_dir,EE_name);
+EE_info = niftiinfo(EE_file);
+EE_mask = niftiread(EE_info);
+T_EE = EE_info.Transform.T;
+EE_size = size(EE_mask);
 
 % DVF
+dvf_file = fullfile(dvf_dir,dvf_name);
 dvf_info = niftiinfo(dvf_file);
 dvf = niftiread(dvf_info);
 T_dvf = dvf_info.Transform.T;
 dvf_size = size(dvf);
 
 %% Get deformed mask on TLC grid using DVF
-def_mask = zeros(size(TLC_mask));
+reg_mask = zeros(size(EI_mask));
 % Get all deformed mask indices in one big array
-[I_TLC, J_TLC, K_TLC] = meshgrid( 1:size(def_mask,1), 1:size(def_mask,2), 1:size(def_mask,3) );
-ind_def = [ reshape(I_TLC,[],1), reshape(J_TLC,[],1), reshape(K_TLC,[],1) ];
+[I_EI, J_EI, K_EI] = ndgrid( 1:size(reg_mask,1), 1:size(reg_mask,2), 1:size(reg_mask,3) );
+ind_def = [ reshape(I_EI,[],1), reshape(J_EI,[],1), reshape(K_EI,[],1) ];
 ind_def1 = [ind_def, ones(size(ind_def,1),1)];
 % Convert those indices into dvf indices
-ind_dvf1 = ind_def1 * T_TLC * T_dvf^(-1);
+ind_dvf1 = ind_def1 * T_EI * T_dvf^(-1);
 % Interpolate displacement values at the dvf indices
 u_dvf1 = ones(size(ind_def1));
 for i = 1:3
     u_grid = squeeze( dvf(:,:,:,1,i) );
     u_dvf1(:,i) = interp3( u_grid, ind_dvf1(:,2), ind_dvf1(:,1), ind_dvf1(:,3) );
 end
-% Convert displaced indices in dvf space to FRC indices
-%ind_FRC1 = (ind_dvf1 + u_dvf1) * T_dvf * T_FRC^(-1);
-ind_FRC1 = ind_def1 + u_dvf1;
+% Convert displaced indices in dvf space to EE indices
+%ind_FRC1 = (ind_dvf1 + u_dvf1) * T_dvf * T_EE^(-1);
+ind_EE1 = ind_def1 + u_dvf1;
 % Interpolate mask values at those indices
-mask_values = interp3( double(FRC_mask), ind_FRC1(:,2), ind_FRC1(:,1), ind_FRC1(:,3) );
+mask_values = interp3( double(EE_mask), ind_EE1(:,2), ind_EE1(:,1), ind_EE1(:,3) );
 mask_values( isnan(mask_values) ) = 0;
 % Convert deformed image indices to linear indices
-ind_linear = sub2ind( size(def_mask), ind_def(:,1), ind_def(:,2), ind_def(:,3) );
+ind_linear = sub2ind( size(reg_mask), ind_def(:,1), ind_def(:,2), ind_def(:,3) );
 % Set mask values at those linear indices
-def_mask(ind_linear) = mask_values;
+reg_mask(ind_linear) = mask_values;
 
 %% Slice viewer
 % figure()
-% sliceViewer(TLC_mask)
-% title('TLC Mask')
+% sliceViewer(EI_mask)
+% title('INSP Mask')
 % 
 % figure()
-% sliceViewer(FRC_mask)
-% title('FRC Mask')
+% sliceViewer(EE_mask)
+% title('EXP Mask')
 % 
 % figure()
 % sliceViewer(def_mask)
 % title('Deformed Mask')
 
 % Quantify alignment
-vol_TLC = sum(TLC_mask > 0.5, 'all');
-vol_def = sum(def_mask > 0.5, 'all');
-overlap = (TLC_mask>0.5) & (def_mask>0.5);
+vol_EE = sum( ismember(EI_mask,seg_maskIDs), 'all');
+vol_def = sum( ismember(reg_mask,seg_maskIDs), 'all');
+overlap = ismember(EI_mask,seg_maskIDs) & ismember(reg_mask,seg_maskIDs);
 overlap = sum(overlap,'all');
-dice_coeff = 2*overlap / (vol_TLC + vol_def);
+dice_coeff = 2*overlap / (vol_EE + vol_def);
 fprintf( '\nDice coefficient between registrered TLC mask and FRC mask: %d\n', dice_coeff )
-fprintf( 'Ratio of registered mask volume to FRC volume: %d\n', vol_def/vol_TLC )
+fprintf( 'Ratio of registered mask volume to FRC volume: %d\n', vol_def/vol_EE )
 
 %% Create surfaces for comparison
-origin = T_FRC(4,1:3);
+origin = T_EE(4,1:3);
 controlPar.contourLevel = 0;
 controlPar.voxelSize = [1 1 1];
 controlPar.nSub = [4 4 4];
 controlPar.capOpt = 1;
 
 % TLC surface
-levelset_TLC = logic2levelset(TLC_mask > 0.5);
-[F_TLC, V_TLC] = levelset2isosurface(levelset_TLC, controlPar);
-V_TLC = V_TLC + origin([2,1,3]) .* [-1,-1,1];
+levelset_EI = logic2levelset( ismember(EI_mask,seg_maskIDs) );
+[F_EI, V_EI] = levelset2isosurface(levelset_EI, controlPar);
+V_EI = V_EI + origin([2,1,3]) .* [-1,-1,1];
 % FRC surface
-levelset_FRC = logic2levelset(FRC_mask > 0.5);
-[F_FRC, V_FRC] = levelset2isosurface(levelset_FRC, controlPar);
-V_FRC = V_FRC + origin([2,1,3]) .* [-1,-1,1];
+levelset_EE = logic2levelset( ismember(EE_mask,seg_maskIDs) );
+[F_EE, V_EE] = levelset2isosurface(levelset_EE, controlPar);
+V_EE = V_EE + origin([2,1,3]) .* [-1,-1,1];
 % Deformed surface
-levelset_def = logic2levelset(def_mask > 0.5);
-[F_def, V_def] = levelset2isosurface(levelset_def, controlPar);
-V_def = V_def + origin([2,1,3]) .* [-1,-1,1];
+levelset_def = logic2levelset( ismember(reg_mask,seg_maskIDs) );
+[F_reg, V_reg] = levelset2isosurface(levelset_def, controlPar);
+V_reg = V_reg + origin([2,1,3]) .* [-1,-1,1];
 
 %% Interpolate displacments onto TLC surface to compare displaced and FRC
 % Interpolate displacements
-% u = SampleDispField(V_TLC,dvf_file);
-% V_def = V_TLC + u;
-% F_def = F_TLC;
+u = SampleDispField(V_EI,dvf_file);
+V_def = V_EI + u;
+F_def = F_EI;
 
 %% Plot surfaces
 figure(); 
 hold on; 
-title('FRC surface')
-gpatch(F_FRC, V_FRC,'gw'); 
+title('INSP Vs. EXP surface')
+gpatch(F_EI, V_EI,'g'); 
+gpatch(F_EE, V_EE,'r');
 camlight headlight;
+drawnow; 
+legend("INSP Mask","EXP Mask")
+daspect([1,1,1]);
+hold off
+
+figure(); 
+hold on; 
+title('INSP Vs. Registered EXP surface')
+gpatch(F_EI, V_EI,'g'); 
+gpatch(F_reg, V_reg,'r'); 
+camlight headlight;
+legend("INSP Mask","Registered EXP Mask")
 drawnow; 
 daspect([1,1,1]);
 hold off
 
 figure(); 
 hold on; 
-title('TLC Vs. Deformed surface')
-gpatch(F_TLC, V_TLC,'gw'); 
-gpatch(F_def, V_def,'rw'); 
+title('EXP vs. Displacement Boundary Conditions')
+gpatch(F_EE, V_EE,'g');
+gpatch(F_def, V_def,'r');
 camlight headlight;
-drawnow; 
-daspect([1,1,1]);
-hold off
-
-figure(); 
-hold on; 
-title('FRC vs. Deformed surface')
-gpatch(F_def, V_def,'gw');
-gpatch(F_FRC, V_FRC,'rw');
-camlight headlight;
+legend("EXP Mask","INSP Mask with BC's")
 drawnow; 
 daspect([1,1,1]);
 hold off

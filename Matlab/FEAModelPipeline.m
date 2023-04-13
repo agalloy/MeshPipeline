@@ -22,7 +22,9 @@ mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_filled.nii';
 % Old data
 %disp_pattern = '..\DispFields\${SUBJECT}\RegMask_Both\Disp12_${AXIS}_1_1_1_4_4_4.hdr';
 % New data
-disp_pattern = '..\DispFields\${SUBJECT}\SSTVD_Both\deformationField.nii.gz';
+%disp_pattern = '..\DispFields\${SUBJECT}\SSTVD_Both\deformationField.nii.gz';
+% Re-registered
+disp_pattern = 'X:\segerard\${SITE}\${SUBJECT}\registration\exp_to_insp\${SIDE}\Disp.nii.gz';
 
 % Output febio mesh model directory and pattern
 feb_dir = '..\FEBio\Meshes\MeshConvergence';
@@ -143,10 +145,18 @@ for i = 1:length(subjects)
         feb_file = fullfile(feb_dir,feb_name);
         
         % Generate mesh2feb input structure
+        site = subject(1:2);
+        if strcmp(model_regions(1),"LTC")
+            side = 'left';
+        elseif strcmp(model_regions(1),"RTC")
+            side = 'right';
+        else
+            side = '';
+        end
         inStruct.NodeCells = NodeCells;
         inStruct.ElementCells = ElementCells;
         inStruct.model_regions = model_regions{j};
-        inStruct.disp_pattern = replace(disp_pattern,'${SUBJECT}',subject);
+        inStruct.disp_pattern = replace(disp_pattern,{'${SUBJECT}','${SITE}','${SIDE}'},{subject,site,side});
         
         % Create mesh file
         mesh2feb(feb_file,feb_template,inStruct)
