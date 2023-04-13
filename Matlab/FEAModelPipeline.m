@@ -146,10 +146,18 @@ for i = 1:length(subjects)
         feb_file = fullfile(feb_dir,feb_name);
         
         % Generate mesh2feb input structure
+        site = subject(1:2);
+        if strcmp(model_regions(1),"LTC")
+            side = 'left';
+        elseif strcmp(model_regions(1),"RTC")
+            side = 'right';
+        else
+            side = '';
+        end
         inStruct.NodeCells = NodeCells;
         inStruct.ElementCells = ElementCells;
         inStruct.model_regions = model_regions{j};
-        inStruct.disp_pattern = replace(disp_pattern,'${SUBJECT}',subject);
+        inStruct.disp_pattern = replace(disp_pattern,{'${SUBJECT}','${SITE}','${SIDE}'},{subject,site,side});
         
         % Create mesh file
         mesh2feb(feb_file,feb_template,inStruct)
