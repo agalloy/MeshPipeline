@@ -8,7 +8,7 @@ feb_dir = '..\FEBio\Runs\TetFactorStudy';
 % Template pattern (template files assumed to be in feb_dir) 
 template_pattern = '${SIDE}Lung_Lobes_Template.feb';
 % .feb input file name pattern
-feb_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}.feb';
+feb_pattern = '${SUBJECT}_${SIDE}Lung_WL_tf${tf}.feb';
 
 % The mesh directory and pattern
 mesh_dir = '..\FEBio\Meshes\TetFactorStudy';

@@ -36,7 +36,7 @@ subjects = "MU160763";
 
 %% User parameters (Advanced)
 % String array of segmentation regions names
-seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL"];
+seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL", "LeftLung", "RightLung"];
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
                [1,2]
@@ -46,6 +46,8 @@ seg_maskIDs = {
                3
                4
                5
+               [1,2]
+               [3,4,5]
               };
 
 % String array of model names
