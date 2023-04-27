@@ -147,9 +147,9 @@ for i = 1:length(subjects)
         
         % Generate mesh2feb input structure
         site = subject(1:2);
-        if strcmp(model_regions(1),"LTC")
+        if strcmp(model_regions{j}(1),"LTC")
             side = 'left';
-        elseif strcmp(model_regions(1),"RTC")
+        elseif strcmp(model_regions{j}(1),"RTC")
             side = 'right';
         else
             side = '';
