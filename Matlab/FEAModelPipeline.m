@@ -27,7 +27,7 @@ mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_filled.nii';
 disp_pattern = 'X:\segerard\${SITE}\${SUBJECT}\registration\exp_to_insp\${SIDE}\Disp.nii.gz';
 
 % Output febio mesh model directory and pattern
-feb_dir = '..\FEBio\Meshes\MeshConvergence';
+feb_dir = '..\FEBio\Meshes\WholeLung';
 feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 
 % Path to .feb template
@@ -51,26 +51,26 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["RightLung_Lobes"];
+model_names = ["LeftLung_WL"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
 %   whole lung model use ["LTC"]
 model_regions = {
-                 ["RTC","RUL","RML","RLL"]
+                 ["LTC", "LTC"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
-                [0]
+                [0, 1]
                 };
 
 % Specify anisotropy setting to use for each model
 anisotropy = {0};
-tetFactor = {1};
+tetFactor = {2};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = ["none"];
+plot_list = ["FilledMesh", "SmoothedSurface"];
 
            
 %% Loop through each subject and generate the desired models
@@ -146,9 +146,9 @@ for i = 1:length(subjects)
         
         % Generate mesh2feb input structure
         site = subject(1:2);
-        if strcmp(model_regions(1),"LTC")
+        if strcmp(model_regions{j}(1),"LTC")
             side = 'left';
-        elseif strcmp(model_regions(1),"RTC")
+        elseif strcmp(model_regions{j}(1),"RTC")
             side = 'right';
         else
             side = '';
