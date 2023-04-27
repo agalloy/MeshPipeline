@@ -4,15 +4,15 @@ clc
 
 %% User Parameters
 % The directory to store the generated FEBio input and output files
-feb_dir = '..\FEBio\Runs';
+feb_dir = '..\FEBio\Runs\WholeLung';
 % Template pattern (template files assumed to be in the run directory) 
-template_pattern = '${SIDE}Lung_Lobes_Template.feb';
+template_pattern = 'WholeLung_Template.feb';
 % .feb input file name pattern
-feb_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}.feb';
+feb_pattern = '${SUBJECT}_${SIDE}Lung_WL_tf${tf}.feb';
 
 % The mesh directory and pattern
-mesh_dir = '..\FEBio\Meshes';
-mesh_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_newDisp_tf${tf}_Mesh.feb';
+mesh_dir = '..\FEBio\Meshes\WholeLung';
+mesh_pattern = '${SUBJECT}_${SIDE}Lung_WL_Mesh.feb';
 
 % Subjects to run (string array)
 subjects = "UT172269";
