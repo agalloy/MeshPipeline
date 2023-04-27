@@ -6,7 +6,7 @@ clear
 clc
 tic
 %% User Parameters
-subject = 'UT172269';
+subject = 'WF120081';
 side = 'left';
 
 % TLC Mask
@@ -93,13 +93,13 @@ reg_mask(ind_linear) = mask_values;
 % title('Deformed Mask')
 
 % Quantify alignment
-vol_EE = sum( ismember(EI_mask,seg_maskIDs), 'all');
+vol_EI = sum( ismember(EI_mask,seg_maskIDs), 'all');
 vol_def = sum( ismember(reg_mask,seg_maskIDs), 'all');
 overlap = ismember(EI_mask,seg_maskIDs) & ismember(reg_mask,seg_maskIDs);
 overlap = sum(overlap,'all');
-dice_coeff = 2*overlap / (vol_EE + vol_def);
+dice_coeff = 2*overlap / (vol_EI + vol_def);
 fprintf( '\nDice coefficient between registrered TLC mask and FRC mask: %d\n', dice_coeff )
-fprintf( 'Ratio of registered mask volume to FRC volume: %d\n', vol_def/vol_EE )
+fprintf( 'Ratio of registered mask volume to FRC volume: %d\n', vol_def/vol_EI )
 
 %% Create surfaces for comparison
 origin = T_EE(4,1:3);
