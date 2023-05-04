@@ -34,7 +34,7 @@ feb_pattern = '${SUBJECT}_${MODEL}_Mesh.feb';
 feb_template = 'FEBioMesh_Template.feb';
 
 % List of subjects to process (as string array)
-subjects = "UT172269";
+subjects = ["UT172269","UT171335","NJ220657","JH110130","CU100893","SF181075","MU160763"];
 
 %% User parameters (Advanced)
 % String array of segmentation regions names
@@ -53,26 +53,28 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_WL"];
+model_names = ["LeftLung_WL_tf2", "LeftLung_Lobes_tf2"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
 %   whole lung model use ["LTC"]
 model_regions = {
                  ["LTC", "LeftLung"]
+                 ["LTC", "LUL", "LLL"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
                 [0, 1]
+                [0, 1, 1]
                 };
 
 % Specify anisotropy setting to use for each model
-anisotropy = {0};
-tetFactor = {2};
+anisotropy = {0,0};
+tetFactor = {2,2};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
-plot_list = ["FilledMesh", "SmoothedSurface"];
+plot_list = ["SmoothedSurface"];
 
            
 %% Loop through each subject and generate the desired models
@@ -82,7 +84,7 @@ num_models = length(model_names);
 tic
 % Subject loop
 for i = 1:length(subjects)
-    subject = char(subjects);
+    subject = char(subjects(i));
 
 % Open the segmentation mask
     % Get the mask filepath
