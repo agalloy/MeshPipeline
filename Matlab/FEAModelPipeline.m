@@ -83,7 +83,7 @@ num_models = length(model_names);
 tic
 % Subject loop
 for i = 1:length(subjects)
-    subject = char(subjects);
+    subject = char(subjects(i));
 
 % Open the segmentation mask
     % Get the mask filepath
