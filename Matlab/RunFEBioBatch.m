@@ -8,7 +8,7 @@ feb_dir = '..\FEBio\Runs\TetFactorStudy';
 % Template pattern (template files assumed to be in feb_dir) 
 template_pattern = '${SIDE}Lung_Lobes_Template.feb';
 % .feb input file name pattern
-feb_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}.feb';
+feb_pattern = '${SUBJECT}_${SIDE}Lung_${TYPE}_tf${tf}.feb';
 
 % The mesh directory and pattern
 mesh_dir = '..\FEBio\Meshes\TetFactorStudy';
@@ -18,7 +18,7 @@ mesh_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}_Mesh.feb';
 subjects = "MU160763";
 
 % Model parameters to change in template (1 x P string array)
-model_params = ["${SIDE}","${tf}"];
+model_params = ["${SIDE}","${TYPE}","${tf}"];
 % Values to set those parameters to (M x P string array)
 % M is the number of models, P is the number of parameters
 model_values = ["Left","4.0"
@@ -28,11 +28,11 @@ model_values = ["Left","4.0"
                 "Left","1.2"
                 "Left","1.1"
                 "Left","1.0"];
-
             
 % Set the tasks to perform
-generate_feb = true; % Generate .feb input files
-run_febio = true; % Run .feb input files
+generate_feb = false; % Generate .feb input files
+run_febio = false; % Run .feb input files
+check_convergence = true; % Display which models failed to converge
 
 %% Loop through each subject and model
 num_subjects = size(subjects,2);
@@ -42,6 +42,9 @@ num_models = size(model_values,1);
 % Add mesh_dir to facilitate later edits
 addpath(mesh_dir);
 
+% Initialize arrays
+error_term = false(num_subjects,num_models);
+model_name = cell(num_subjects,num_models);
 for i = 1:num_subjects
     subject = char( subjects(i) );
     
@@ -49,6 +52,7 @@ for i = 1:num_subjects
         % Get name of the .feb file
         feb_name = replace( feb_pattern, ["${SUBJECT}",model_params], [subjects(i),model_values(j,:)] );
         feb_file = fullfile(feb_dir,feb_name);
+        model_name{i,j} = replace(feb_name,'.feb','');
         
         % Generate .feb files for the subject
         if generate_feb
@@ -89,5 +93,20 @@ for i = 1:num_subjects
             % Change back to original working directory
             cd(work_dir);
         end    
+
+        if check_convergence
+            log_file = strrep(feb_file,'.feb','.log');
+            log_txt = fileread(log_file);
+            matches = regexp(log_txt,'E R R O R   T E R M I N A T I O N','match');
+            if ~isempty(matches)
+                error_term(i,j) = true;
+            end
+        end
     end
+end
+
+%% Display the names of models that failed to converge
+if check_convergence
+    disp('Models that failed to converge:')
+    disp(model_name(error_term))
 end

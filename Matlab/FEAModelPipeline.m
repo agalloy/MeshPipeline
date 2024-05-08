@@ -36,7 +36,7 @@ subjects = "MU160763";
 
 %% User parameters (Advanced)
 % String array of segmentation regions names
-seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL"];
+seg_regions = ["LTC","LUL","LLL","RTC","RUL","RML","RLL", "LeftLung", "RightLung"];
 % Cell array containing mask ID's for each region (same order as names)
 seg_maskIDs = {
                [1,2]
@@ -46,6 +46,8 @@ seg_maskIDs = {
                3
                4
                5
+               [1,2]
+               [3,4,5]
               };
 
 % String array of model names
@@ -73,7 +75,6 @@ tetFactor = {1.1,1.2,1.5};
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh
 plot_list = ["None"];
-
            
 %% Loop through each subject and generate the desired models
 num_subjects = length(subjects);
@@ -82,7 +83,7 @@ num_models = length(model_names);
 tic
 % Subject loop
 for i = 1:length(subjects)
-    subject = char(subjects);
+    subject = char(subjects(i));
 
 % Open the segmentation mask
     % Get the mask filepath
@@ -147,10 +148,18 @@ for i = 1:length(subjects)
         feb_file = fullfile(feb_dir,feb_name);
         
         % Generate mesh2feb input structure
+        site = subject(1:2);
+        if strcmp(model_regions{j}(1),"LTC")
+            side = 'left';
+        elseif strcmp(model_regions{j}(1),"RTC")
+            side = 'right';
+        else
+            side = '';
+        end
         inStruct.NodeCells = NodeCells;
         inStruct.ElementCells = ElementCells;
         inStruct.model_regions = model_regions{j};
-        inStruct.disp_pattern = replace(disp_pattern,'${SUBJECT}',subject);
+        inStruct.disp_pattern = replace(disp_pattern,{'${SUBJECT}','${SITE}','${SIDE}'},{subject,site,side});
         
         % Create mesh file
         mesh2feb(feb_file,feb_template,inStruct)
