@@ -11,18 +11,29 @@
 # All .xplt files
 *.xplt
 
+# All .mat file
+*.mat
+
+# All ndata.txt or edata.txt files
+*ndata.txt
+*edata.txt
+
+
 # Local folder
 Local/
 # Everything in the Local folder
 Local/**
+
 # Segmentation folder
 Segmentations/
 # Everything in the Segmentation folder
 Segmentations/**
+
 # DispFields folder
 DispFields/
 # Everthing in the DispFields folder
 DispFields/**
+
 # Images folder
 Images/
 # Everything in the Images folder

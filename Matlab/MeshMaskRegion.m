@@ -141,12 +141,13 @@ end
 
 % Smoothing parameters
 cParSmooth.Method = 'HC'; % Humphrey's Classes smoothing
-cParSmooth.Alpha = 0.1;
+cParSmooth.Alpha = 0;
 cParSmooth.Beta = 0.5;
 cParSmooth.n = 50; % Number of iterations
 
 % Smooth the mesh
 [NodeArray] = patchSmooth(ElementArray, NodeArray, [], cParSmooth);
+
 
 % Evaluate Surface Metrics
 % Calculate Regularity of Mesh

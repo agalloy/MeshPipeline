@@ -4,26 +4,30 @@ clc
 
 %% User Parameters
 % The directory to store the generated FEBio input and output files
-feb_dir = '..\FEBio\Runs\MeshConvergence';
-% Template pattern (template files assumed to be in the run directory) 
+feb_dir = '..\FEBio\Runs\TetFactorStudy';
+% Template pattern (template files assumed to be in feb_dir) 
 template_pattern = '${SIDE}Lung_Lobes_Template.feb';
 % .feb input file name pattern
 feb_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}.feb';
 
 % The mesh directory and pattern
-mesh_dir = '..\FEBio\Meshes\MeshConvergence';
+mesh_dir = '..\FEBio\Meshes\TetFactorStudy';
 mesh_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}_Mesh.feb';
 
 % Subjects to run (string array)
-subjects = "UT172269";
+subjects = "MU160763";
 
 % Model parameters to change in template (1 x P string array)
 model_params = ["${SIDE}","${tf}"];
 % Values to set those parameters to (M x P string array)
 % M is the number of models, P is the number of parameters
-model_values = ["Right","1.0"
-                "Right","1.1"
-                "Right","1.2"];
+model_values = ["Left","4.0"
+                "Left","3.0"
+                "Left","2.0"
+                "Left","1.5"
+                "Left","1.2"
+                "Left","1.1"
+                "Left","1.0"];
 
             
 % Set the tasks to perform
@@ -58,7 +62,7 @@ for i = 1:num_subjects
             fclose(fID);
             
             % Edit template to generate new model file
-            % Get name of mesh file and make input include it
+            % Get name of mesh file and add it to <include> tag
             mesh_name = replace( mesh_pattern, ["${SUBJECT}",model_params], [subjects(i),model_values(j,:)] );
             mesh_file = which( fullfile(mesh_dir,mesh_name) );
             model_txt = replace(model_txt,'${MESHFILE}',mesh_file);
