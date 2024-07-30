@@ -23,18 +23,3 @@
 Local/
 # Everything in the Local folder
 Local/**
-
-# Segmentation folder
-Segmentations/
-# Everything in the Segmentation folder
-Segmentations/**
-
-# DispFields folder
-DispFields/
-# Everthing in the DispFields folder
-DispFields/**
-
-# Images folder
-Images/
-# Everything in the Images folder
-Images/**

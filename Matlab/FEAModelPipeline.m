@@ -19,8 +19,6 @@ mask_dir = '..\Segmentations';
 mask_pattern = '${SUBJECT}\${SUBJECT}_baseTLC_lobemask_half.nii';
 
 % Displacement field pattern
-% Old data
-%disp_pattern = '..\DispFields\${SUBJECT}\RegMask_Both\Disp12_${AXIS}_1_1_1_4_4_4.hdr';
 % New data
 disp_pattern = '..\DispFields\${SUBJECT}\Disp_Left.nii.gz';
 
@@ -51,26 +49,28 @@ seg_maskIDs = {
               };
 
 % String array of model names
-model_names = ["LeftLung_Lobes_tf1.1","LeftLung_Lobes_tf1.2","LeftLung_Lobes_tf1.5"];
+model_names = ["LeftLung_Lobes","RightLung_Lobes","LeftLung_WL","RightLung_WL"];
           
 % Cell array of segmentation regions to use for each model 
 % e.g. For a left lung lobar model use ["LTC","LUL","LLL"], for a left lung
 %   whole lung model use ["LTC"]
 model_regions = {
                  ["LTC","LUL","LLL"]
-                 ["LTC","LUL","LLL"]
-                 ["LTC","LUL","LLL"]
+                 ["RTC","RUL","RML","RLL"]
+                 ["LTC","LeftLung"]
+                 ["RTC","RightLung"]
                 };
 % Specify which model regions are volumetric and need tetradhedral filling
 model_tetFill = {
                 [0,1,1]
-                [0,1,1]
-                [0,1,1]
+                [0,1,1,1]
+                [0,1]
+                [0,1]
                 };
 
 % Specify anisotropy setting to use for each model
-anisotropy = {0,0,0};
-tetFactor = {1.1,1.2,1.5};
+anisotropy = {0,0,0,0};
+tetFactor = {2,2,2,2};
 
 % Specify which plots you want (as a string array) from the following list:
 % LevelSet, InitialSurface, RemeshedSurface, SmoothedSurface, FilledMesh

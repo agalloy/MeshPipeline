@@ -9,6 +9,8 @@ feb_dir = '..\FEBio\Runs\TetFactorStudy';
 template_pattern = '${SIDE}Lung_Lobes_Template.feb';
 % .feb input file name pattern
 feb_pattern = '${SUBJECT}_${SIDE}Lung_${TYPE}_tf${tf}.feb';
+% Pattern for output data files (do not include file type)
+out_pattern = '';
 
 % The mesh directory and pattern
 mesh_dir = '..\FEBio\Meshes\TetFactorStudy';
@@ -16,6 +18,8 @@ mesh_pattern = '${SUBJECT}_${SIDE}Lung_Lobes_tf${tf}_Mesh.feb';
 
 % Subjects to run (string array)
 subjects = "MU160763";
+% Subjects to exclude
+exclude = "";
 
 % Model parameters to change in template (1 x P string array)
 model_params = ["${SIDE}","${TYPE}","${tf}"];
@@ -35,6 +39,23 @@ generate_feb = false; % Generate .feb input files
 run_febio = false; % Run .feb input files
 check_convergence = true; % Display which models failed to converge
 
+%% If subject list is set to "all" get all subjects in the mesh directory
+if strcmp(subjects,"all")
+    mesh_pattern_wc = replace( mesh_pattern, ["${SUBJECT}",model_params], "*" );
+    mesh_dir_files = dir(fullfile( mesh_dir,mesh_pattern_wc ));
+    subjects = strings(length(mesh_dir_files),1);
+    % Get all the subject names in folder
+    for i = 1:length(mesh_dir_files)
+        subject = mesh_dir_files(i).name;
+        subject = extractBefore(subject,'_');
+        subjects(i) = subject;
+    end
+    % Remove redundancies
+    subjects = unique(subjects);
+end
+
+subjects = subjects( ~ismember(subjects,exclude) );
+
 %% Loop through each subject and model
 num_subjects = size(subjects,2);
 num_params = size(model_params,2);
@@ -46,6 +67,8 @@ addpath(mesh_dir);
 % Initialize arrays
 error_term = false(num_subjects,num_models);
 model_name = cell(num_subjects,num_models);
+progress = 0;
+wb = waitbar(0,'');
 for i = 1:num_subjects
     subject = char( subjects(i) );
     
@@ -71,6 +94,9 @@ for i = 1:num_subjects
             mesh_name = replace( mesh_pattern, ["${SUBJECT}",model_params], [subjects(i),model_values(j,:)] );
             mesh_file = which( fullfile(mesh_dir,mesh_name) );
             model_txt = replace(model_txt,'${MESHFILE}',mesh_file);
+            % Get name of output files and make input use it
+            out_file = replace( out_pattern,  ["${SUBJECT}",model_params], [subjects(i),model_values(j,:)] );
+            model_txt = replace(model_txt,"${OUTFILE}",out_file);
             % Adjust the value of any other parameters on the template
             model_txt = replace( model_txt, ["${SUBJECT}",model_params], [subjects(i),model_values(j,:)] );        
             % Don't let Matlab mess with formatting
@@ -104,7 +130,11 @@ for i = 1:num_subjects
             end
         end
     end
+    
+    progress = progress + 1;
 end
+
+delete(wb)
 
 %% Display the names of models that failed to converge
 if check_convergence
